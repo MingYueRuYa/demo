@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4B8C9E1D-13BC-4A27-A2D7-D4B9682C9F06}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{42E6D93B-C4A3-4F6E-99E8-9322DF0F5C02}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{7F24B611-B4B8-4A4D-9B83-E2964C49F989}</UniqueIdentifier>
+      <Extensions>qrc;ui;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="网页">
+      <UniqueIdentifier>{9C9E1CB5-3F9B-4F81-A898-8E7E0A450FEC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\browserwindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\messageconsole.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\webenginepane.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\webbridge.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\browserwindow.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="src\messageconsole.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="src\webenginepane.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="src\webbridge.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="resources.qrc">
+      <Filter>资源文件</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="web\index.html">
+      <Filter>网页</Filter>
+    </None>
+  </ItemGroup>
+</Project>

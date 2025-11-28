@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Qt WebEngine 双向通信 Demo</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            background: rgba(30, 30, 30, 0.85);
+            color: #f5f5f5;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 12px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #00a2ff;
+            color: #fff;
+            margin-right: 8px;
+        }
+
+        input {
+            width: 60%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            margin-right: 8px;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px;
+            border-radius: 8px;
+            height: 220px;
+            overflow: auto;
+            font-size: 13px;
+        }
+    </style>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <script>
+        let bridge = null;
+
+        const log = (text) => {
+            const panel = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            panel.textContent = `[${timestamp}] ${text}\n` + panel.textContent;
+        };
+
+        const initChannel = () => {
+            new QWebChannel(qt.webChannelTransport, (channel) => {
+                bridge = channel.objects.bridge;
+                log('已连接到 C++ WebBridge');
+
+                bridge.messageFromCpp.connect((msg) => {
+                    log(`来自 C++: ${msg}`);
+                });
+
+                log(`当前版本：${bridge.applicationVersion()}`);
+            });
+        };
+
+        const sendToCpp = () => {
+            if (!bridge) {
+                return;
+            }
+            const text = document.getElementById('payload').value.trim();
+            if (!text) {
+                return;
+            }
+            bridge.sendToCpp(text);
+            log(`已发送到 C++: ${text}`);
+        };
+
+        window.addEventListener('DOMContentLoaded', initChannel);
+    </script>
+</head>
+<body>
+    <div class="card">
+        <h1>Qt WebEngine 常用特性演示</h1>
+        <p>此页面演示了 Web 与 C++ 之间的双向通信、透明窗口、缓存清理等场景。</p>
+
+        <section>
+            <h2>发送消息到 C++</h2>
+            <input id="payload" placeholder="输入要发送给 C++ 的文本" />
+            <button onclick="sendToCpp()">发送</button>
+        </section>
+
+        <section>
+            <h2>运行日志</h2>
+            <pre id="log">// 等待 C++ 消息...</pre>
+        </section>
+    </div>
+</body>
+</html>
+

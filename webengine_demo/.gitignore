@@ -1,0 +1,14 @@
+build/
+out/
+cmake-build*/
+CMakeCache.txt
+CMakeFiles/
+*.user
+*.pro.user
+*.qbs.user
+.vs/
+*.vcxproj.user
+.idea/
+.DS_Store
+Thumbs.db
+
