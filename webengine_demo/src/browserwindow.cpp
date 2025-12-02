@@ -1,5 +1,6 @@
 #include "browserwindow.h"
 
+#include "connectguard.h"
 #include "messageconsole.h"
 #include "webenginepane.h"
 #include "webbridge.h"
@@ -36,20 +37,20 @@ BrowserWindow::BrowserWindow(QWidget *parent)
     buildToolbar();
 
     if (m_console) {
-        connect(m_console, &MessageConsole::messageSent, this, [this](const QString &payload) {
+        ENSURE_QT_CONNECT(m_console, &MessageConsole::messageSent, this, [this](const QString &payload) {
             updateStatus(tr("已向网页发送：%1").arg(payload));
         });
-        connect(m_console, &MessageConsole::messageFromWeb, this, &BrowserWindow::handleMessageFromPage);
+        ENSURE_QT_CONNECT(m_console, &MessageConsole::messageFromWeb, this, &BrowserWindow::handleMessageFromPage);
     }
 
     if (m_engine) {
         m_engine->load(homeUrl());
-        connect(m_engine, &WebEnginePane::urlChanged, this, [this](const QUrl &url) {
+        ENSURE_QT_CONNECT(m_engine, &WebEnginePane::urlChanged, this, [this](const QUrl &url) {
             if (!url.isEmpty()) {
                 m_addressBar->setText(url.toString());
             }
         });
-        connect(m_engine, &WebEnginePane::loadFinished, this, &BrowserWindow::handleLoadFinished);
+        ENSURE_QT_CONNECT(m_engine, &WebEnginePane::loadFinished, this, &BrowserWindow::handleLoadFinished);
     }
 
     m_addressBar->setText(homeUrl().toString());
@@ -91,29 +92,29 @@ void BrowserWindow::buildToolbar()
         toolbar->addAction(tr("刷新"), m_engine->view(), &QWebEngineView::reload);
     }
     auto *homeAction = toolbar->addAction(tr("主页"));
-    connect(homeAction, &QAction::triggered, this, &BrowserWindow::navigateHome);
+    ENSURE_QT_CONNECT(homeAction, &QAction::triggered, this, &BrowserWindow::navigateHome);
 
     m_addressBar = new QLineEdit(this);
     m_addressBar->setPlaceholderText(tr("输入 URL 或按 Enter 加载"));
     m_addressBar->setClearButtonEnabled(true);
-    connect(m_addressBar, &QLineEdit::returnPressed, this, &BrowserWindow::loadRequestedUrl);
+    ENSURE_QT_CONNECT(m_addressBar, &QLineEdit::returnPressed, this, &BrowserWindow::loadRequestedUrl);
     toolbar->addWidget(m_addressBar);
 
     toolbar->addSeparator();
     auto *clearAction = toolbar->addAction(tr("清空缓存"));
-    connect(clearAction, &QAction::triggered, this, &BrowserWindow::clearProfileData);
+    ENSURE_QT_CONNECT(clearAction, &QAction::triggered, this, &BrowserWindow::clearProfileData);
     auto *sendAction = toolbar->addAction(tr("消息面板"));
-    connect(sendAction, &QAction::triggered, this, &BrowserWindow::showMessageConsole);
+    ENSURE_QT_CONNECT(sendAction, &QAction::triggered, this, &BrowserWindow::showMessageConsole);
 
     m_transparentAction = toolbar->addAction(tr("透明模式"));
     m_transparentAction->setCheckable(true);
-    connect(m_transparentAction, &QAction::toggled, this, &BrowserWindow::handleTransparencyToggle);
+    ENSURE_QT_CONNECT(m_transparentAction, &QAction::toggled, this, &BrowserWindow::handleTransparencyToggle);
 
     auto *sliderAction = new QWidgetAction(this);
     m_opacitySlider = new QSlider(Qt::Horizontal, toolbar);
     m_opacitySlider->setRange(kOpacityMin, kOpacityMax);
     m_opacitySlider->setValue(kOpacityDefault);
-    connect(m_opacitySlider, &QSlider::valueChanged, this, &BrowserWindow::applyOpacity);
+    ENSURE_QT_CONNECT(m_opacitySlider, &QSlider::valueChanged, this, &BrowserWindow::applyOpacity);
 
     sliderAction->setDefaultWidget(m_opacitySlider);
     toolbar->addAction(sliderAction);
@@ -161,7 +162,7 @@ void BrowserWindow::showMessageConsole()
 void BrowserWindow::handleMessageFromPage(const QString &payload)
 {
     updateStatus(tr("网页发来信息：%1").arg(payload));
-    QMessageBox::information(this, tr("来自网页"), payload);
+    // QMessageBox::information(this, tr("来自网页"), payload);
 }
 
 void BrowserWindow::handleLoadFinished(bool ok)

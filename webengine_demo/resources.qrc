@@ -1,5 +1,6 @@
 <RCC>
-    <qresource prefix="/web">
+    <qresource prefix="">
         <file>web/index.html</file>
+        <file>web/qtwebchannel/qwebchannel.js</file>
     </qresource>
 </RCC>

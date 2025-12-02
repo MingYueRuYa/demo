@@ -1,5 +1,6 @@
 #include "webenginepane.h"
 
+#include "connectguard.h"
 #include "webbridge.h"
 
 #include <QStandardPaths>
@@ -29,9 +30,9 @@ WebEnginePane::WebEnginePane(WebBridge *bridge, QWidget *parent)
     ensureBridge();
     setupChannel();
 
-    connect(m_view, &QWebEngineView::urlChanged, this, &WebEnginePane::urlChanged);
-    connect(m_view, &QWebEngineView::loadFinished, this, &WebEnginePane::loadFinished);
-    connect(m_bridge, &WebBridge::messageFromJs, this, &WebEnginePane::messageFromJs);
+    ENSURE_QT_CONNECT(m_view, &QWebEngineView::urlChanged, this, &WebEnginePane::urlChanged);
+    ENSURE_QT_CONNECT(m_view, &QWebEngineView::loadFinished, this, &WebEnginePane::loadFinished);
+    ENSURE_QT_CONNECT(m_bridge, &WebBridge::messageFromJs, this, &WebEnginePane::messageFromJs);
 }
 
 WebEnginePane::~WebEnginePane() = default;

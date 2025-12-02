@@ -1,5 +1,6 @@
 #include "messageconsole.h"
 
+#include "connectguard.h"
 #include "webbridge.h"
 
 #include <QDateTime>
@@ -37,7 +38,7 @@ MessageConsole::MessageConsole(QWidget *parent)
 
     layout->addLayout(inputLayout);
 
-    connect(m_input, &QLineEdit::returnPressed, this, &MessageConsole::handleSendClicked);
+    ENSURE_QT_CONNECT(m_input, &QLineEdit::returnPressed, this, &MessageConsole::handleSendClicked);
 }
 
 void MessageConsole::attachBridge(WebBridge *bridge)
@@ -50,8 +51,8 @@ void MessageConsole::attachBridge(WebBridge *bridge)
     }
     m_bridge = bridge;
     if (m_bridge) {
-        connect(m_bridge, &WebBridge::messageFromJs, this, &MessageConsole::handleIncomingMessage);
-        connect(m_bridge, &WebBridge::messageFromCpp, this, [this](const QString &payload) {
+        ENSURE_QT_CONNECT(m_bridge, &WebBridge::messageFromJs, this, &MessageConsole::handleIncomingMessage);
+        ENSURE_QT_CONNECT(m_bridge, &WebBridge::messageFromCpp, this, [this](const QString &payload) {
             appendEntry(tr("C++ -> Web"), payload);
         });
         appendSystemMessage(tr("消息通道已连接 "));

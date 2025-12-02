@@ -2,11 +2,12 @@
 
 一个基于 Qt 6 + WebEngineWidgets 的示例应用，展示以下能力：
 
-- Web 与 C++ 之间的双向通信（继承 `WebBridge` 即可完成交互）
+- Web 与 C++ 之间的双向通信（继承抽象基类 `WebBridge` 即可完成交互）
 - 一键清理缓存 / Cookie / 历史记录（`QWebEngineProfile`）
 - 动态调整窗口透明度与不透明度
 - 启用多项 WebEngine 常用特性（JavaScript、WebGL、Clipboard、LocalContent 等）
 - 通过 Chromium Flags 强制开启 GPU 合成与 GPU 光栅化
+- 可通过可执行目录下的 `config.json` 指定 WebEngine 远程调试端口
 - 独立消息面板负责 Web ↔ C++ 消息收发与日志记录
 
 > 如需 Qt 5，请自行将 `find_package(Qt6 ...)` 改成 `Qt5` 并将链接库替换成 `Qt5::` 前缀。
@@ -69,10 +70,26 @@
 - “透明模式 + 滑块” 控制窗口透明度
 - “消息面板” 聚合 Web ↔ C++ 消息；在底部面板输入消息直接发送到网页，网页返回的信息也会记录在同一面板
 - 网页输入框可把文本送回 C++，必要时还会弹出 MessageBox 提示
+- Debug 构建默认设置 `QTWEBENGINE_REMOTE_DEBUGGING=9223`（若 `config.json` 未指定端口），可用 Chrome DevTools 连接 `http://127.0.0.1:<端口>`
+
+## 配置文件（config.json）
+
+程序启动时会在可执行文件所在目录查找 `config.json`，当前支持以下字段：
+
+- `remoteDebugPort`：整数端口，若存在且有效，将自动设置 `QTWEBENGINE_REMOTE_DEBUGGING`，无论 Debug 还是 Release。
+
+示例：
+
+```json
+{
+    "remoteDebugPort": 9333
+}
+```
+
 
 ## 继承一个类即可完成通信
 
-`WebBridge` 是所有 Web/C++ 通信对象的基类，自动暴露到 `QWebChannel` 中：
+`WebBridge` 是一个抽象基类，负责声明 Web/C++ 通信的统一接口，并自动暴露到 `QWebChannel` 中：
 
 - JS 侧调用 `bridge.sendToCpp(payload)`，会触发 `WebBridge::sendToCpp`，再回调 `virtual void onMessageFromWeb(const QString &payload)`；
 - C++ 侧调用 `dispatchToWeb(payload)`（或在子类中调用 `sendToWeb` 的封装）即可把字符串广播回 JS，对应信号 `messageFromCpp`；

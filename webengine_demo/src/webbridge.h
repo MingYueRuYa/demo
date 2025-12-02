@@ -21,8 +21,8 @@ signals:
     void messageFromCpp(const QString &payload);
 
 protected:
-    virtual void onMessageFromWeb(const QString &payload);
-    virtual void onMessageFromCpp(const QString &payload);
+    virtual void onMessageFromWeb(const QString &payload) = 0;
+    virtual void onMessageFromCpp(const QString &payload) = 0;
 };
 
 class WebBridge;
@@ -36,5 +36,6 @@ public:
 
 protected:
     void onMessageFromWeb(const QString &payload) override;
+    void onMessageFromCpp(const QString &payload) override;
 };
 

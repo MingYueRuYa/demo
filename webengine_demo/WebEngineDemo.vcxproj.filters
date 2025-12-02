@@ -21,6 +21,9 @@
     <ClCompile Include="src\browserwindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\configmanager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -47,6 +50,9 @@
     <QtMoc Include="src\webbridge.h">
       <Filter>头文件</Filter>
     </QtMoc>
+    <ClInclude Include="src\configmanager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="resources.qrc">

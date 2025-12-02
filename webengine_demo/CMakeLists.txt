@@ -17,6 +17,8 @@ qt_add_executable(WebEngineDemo
     src/main.cpp
     src/browserwindow.cpp
     src/browserwindow.h
+    src/configmanager.cpp
+    src/configmanager.h
     src/messageconsole.cpp
     src/messageconsole.h
     src/webenginepane.cpp
@@ -44,4 +46,8 @@ target_link_libraries(WebEngineDemo PRIVATE
 set_target_properties(WebEngineDemo PROPERTIES
     WIN32_EXECUTABLE ON
 )
+
+if(MSVC)
+    target_compile_options(WebEngineDemo PRIVATE /utf-8)
+endif()
 

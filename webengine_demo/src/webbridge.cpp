@@ -28,22 +28,17 @@ void WebBridge::dispatchToWeb(const QString &payload)
     onMessageFromCpp(payload);
 }
 
-void WebBridge::onMessageFromWeb(const QString &payload)
-{
-    Q_UNUSED(payload);
-}
-
-void WebBridge::onMessageFromCpp(const QString &payload)
-{
-    Q_UNUSED(payload);
-}
-
 BasicBridge::BasicBridge(QObject *parent)
     : WebBridge(parent)
 {
 }
 
 void BasicBridge::onMessageFromWeb(const QString &payload)
+{
+    Q_UNUSED(payload);
+}
+
+void BasicBridge::onMessageFromCpp(const QString &payload)
 {
     Q_UNUSED(payload);
 }
