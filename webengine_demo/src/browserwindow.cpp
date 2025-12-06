@@ -16,6 +16,7 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWebEngineView>
+#include <QWebEngineProfile>
 #include <QWidgetAction>
 #include <QWidget>
 
@@ -99,6 +100,17 @@ void BrowserWindow::buildToolbar()
     m_addressBar->setClearButtonEnabled(true);
     ENSURE_QT_CONNECT(m_addressBar, &QLineEdit::returnPressed, this, &BrowserWindow::loadRequestedUrl);
     toolbar->addWidget(m_addressBar);
+
+    if (m_engine && m_engine->profile()) {
+        toolbar->addSeparator();
+        m_userAgentInput = new QLineEdit(this);
+        m_userAgentInput->setPlaceholderText(tr("自定义 UA（留空恢复默认）"));
+        m_userAgentInput->setClearButtonEnabled(true);
+        m_userAgentInput->setText(m_engine->currentUserAgent());
+        ENSURE_QT_CONNECT(m_userAgentInput, &QLineEdit::returnPressed, this, &BrowserWindow::applyCustomUserAgent);
+        ENSURE_QT_CONNECT(m_userAgentInput, &QLineEdit::editingFinished, this, &BrowserWindow::applyCustomUserAgent);
+        toolbar->addWidget(m_userAgentInput);
+    }
 
     toolbar->addSeparator();
     auto *clearAction = toolbar->addAction(tr("清空缓存"));
@@ -188,6 +200,26 @@ void BrowserWindow::applyOpacity(int sliderValue)
 void BrowserWindow::handleTransparencyToggle(bool enabled)
 {
     updateWindowTransparency(enabled);
+}
+
+void BrowserWindow::applyCustomUserAgent()
+{
+    if (!m_engine) {
+        return;
+    }
+
+    const QString uaText = m_userAgentInput ? m_userAgentInput->text() : QString();
+    m_engine->setUserAgent(uaText);
+
+    if (m_userAgentInput) {
+        m_userAgentInput->setText(m_engine->currentUserAgent());
+    }
+
+    if (uaText.trimmed().isEmpty()) {
+        updateStatus(tr("已恢复默认 UA"));
+    } else {
+        updateStatus(tr("已应用自定义 UA"));
+    }
 }
 
 void BrowserWindow::updateStatus(const QString &text, int timeoutMs)

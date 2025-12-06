@@ -8,6 +8,8 @@
 - 启用多项 WebEngine 常用特性（JavaScript、WebGL、Clipboard、LocalContent 等）
 - 通过 Chromium Flags 强制开启 GPU 合成与 GPU 光栅化
 - 可通过可执行目录下的 `config.json` 指定 WebEngine 远程调试端口
+- 页面加载完成前发送给网页的消息会自动缓存，待页面通知 C++ 已就绪后批量发送
+- `WebEngineSignals` 工具类可一次性绑定 QWebEngineView/Page 的常用信号，方便在其它类中继承复用
 - 独立消息面板负责 Web ↔ C++ 消息收发与日志记录
 
 > 如需 Qt 5，请自行将 `find_package(Qt6 ...)` 改成 `Qt5` 并将链接库替换成 `Qt5::` 前缀。
@@ -71,6 +73,8 @@
 - “消息面板” 聚合 Web ↔ C++ 消息；在底部面板输入消息直接发送到网页，网页返回的信息也会记录在同一面板
 - 网页输入框可把文本送回 C++，必要时还会弹出 MessageBox 提示
 - Debug 构建默认设置 `QTWEBENGINE_REMOTE_DEBUGGING=9223`（若 `config.json` 未指定端口），可用 Chrome DevTools 连接 `http://127.0.0.1:<端口>`
+- 若页面尚未完成加载，C++ 发送的消息会缓存在队列中；网页在 `QWebChannel` 建立后会主动调用 `bridge.notifyPageReady()` 告知 C++ 已就绪，此时缓冲的消息会按顺序发送到 JS。
+- 想统一监听 QWebEngine 事件时，可继承 `WebEngineSignals` 并调用 `bind(QWebEngineView*)`，即可收到加载、权限、下载、协议注册等信号的集中转发。
 
 ## 配置文件（config.json）
 

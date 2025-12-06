@@ -28,6 +28,11 @@ void WebBridge::dispatchToWeb(const QString &payload)
     onMessageFromCpp(payload);
 }
 
+void WebBridge::notifyPageReady()
+{
+    emit pageReady();
+}
+
 BasicBridge::BasicBridge(QObject *parent)
     : WebBridge(parent)
 {

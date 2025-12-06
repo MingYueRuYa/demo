@@ -26,6 +26,7 @@ private slots:
     void handleLoadFinished(bool ok);
     void applyOpacity(int sliderValue);
     void handleTransparencyToggle(bool enabled);
+    void applyCustomUserAgent();
 
 private:
     void buildUi();
@@ -37,6 +38,7 @@ private:
     WebEnginePane *m_engine {nullptr};
     MessageConsole *m_console {nullptr};
     QLineEdit *m_addressBar {nullptr};
+    QLineEdit *m_userAgentInput {nullptr};
     QSlider *m_opacitySlider {nullptr};
     QAction *m_transparentAction {nullptr};
 };

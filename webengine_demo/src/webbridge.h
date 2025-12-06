@@ -12,6 +12,7 @@ public:
 
     Q_INVOKABLE void sendToCpp(const QString &payload);
     Q_INVOKABLE QString applicationVersion() const;
+    Q_INVOKABLE void notifyPageReady();
 
 public slots:
     void dispatchToWeb(const QString &payload);
@@ -19,6 +20,7 @@ public slots:
 signals:
     void messageFromJs(const QString &payload);
     void messageFromCpp(const QString &payload);
+    void pageReady();
 
 protected:
     virtual void onMessageFromWeb(const QString &payload) = 0;
