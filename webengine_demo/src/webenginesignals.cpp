@@ -104,47 +104,47 @@ void WebEngineSignals::connectViewSignals(QWebEngineView *view)
 void WebEngineSignals::connectPageSignals(QWebEnginePage *page)
 {
     ENSURE_QT_CONNECT(page, &QWebEnginePage::linkHovered, this, &WebEngineSignals::pageLinkHovered);
-    //ENSURE_QT_CONNECT(page, &QWebEnginePage::fullScreenRequested, this, &WebEngineSignals::pageFullScreenRequested);
-    //ENSURE_QT_CONNECT(page,
-    //                  &QWebEnginePage::featurePermissionRequested,
-    //                  this,
-    //                  &WebEngineSignals::pageFeaturePermissionRequested);
-    //ENSURE_QT_CONNECT(page,
-    //                  &QWebEnginePage::featurePermissionRequestCanceled,
-    //                  this,
-    //                  &WebEngineSignals::pageFeaturePermissionRequestCanceled);
-    //ENSURE_QT_CONNECT(page, &QWebEnginePage::quotaRequested, this, &WebEngineSignals::pageQuotaRequested);
+    ENSURE_QT_CONNECT(page, &QWebEnginePage::fullScreenRequested, this, &WebEngineSignals::pageFullScreenRequested);
+    ENSURE_QT_CONNECT(page,
+                      &QWebEnginePage::featurePermissionRequested,
+                      this,
+                      &WebEngineSignals::pageFeaturePermissionRequested);
+    ENSURE_QT_CONNECT(page,
+                      &QWebEnginePage::featurePermissionRequestCanceled,
+                      this,
+                      &WebEngineSignals::pageFeaturePermissionRequestCanceled);
+    ENSURE_QT_CONNECT(page, &QWebEnginePage::quotaRequested, this, &WebEngineSignals::pageQuotaRequested);
     //ENSURE_QT_CONNECT(page, &QWebEnginePage::certificateError, this, &WebEngineSignals::pageCertificateError);
+    ENSURE_QT_CONNECT(page,
+                      &QWebEnginePage::selectClientCertificate,
+                      this,
+                      &WebEngineSignals::pageSelectClientCertificate);
+    ENSURE_QT_CONNECT(page,
+                      &QWebEnginePage::authenticationRequired,
+                      this,
+                      &WebEngineSignals::pageAuthenticationRequired);
+    ENSURE_QT_CONNECT(page,
+                      &QWebEnginePage::proxyAuthenticationRequired,
+                      this,
+                      &WebEngineSignals::pageProxyAuthenticationRequired);
+    ENSURE_QT_CONNECT(page,
+                      &QWebEnginePage::renderProcessTerminated,
+                      this,
+                      &WebEngineSignals::pageRenderProcessTerminated);
+    ENSURE_QT_CONNECT(page, &QWebEnginePage::windowCloseRequested, this, &WebEngineSignals::pageWindowCloseRequested);
+    //ENSURE_QT_CONNECT(page, &QWebEnginePage::profileChanged, this, &WebEngineSignals::pageProfileChanged);
     //ENSURE_QT_CONNECT(page,
-    //                  &QWebEnginePage::selectClientCertificate,
+    //                  &QWebEnginePage::newWindowRequested,
     //                  this,
-    //                  &WebEngineSignals::pageSelectClientCertificate);
+    //                  &WebEngineSignals::pageNewWindowRequested);
+    ENSURE_QT_CONNECT(page,
+                      &QWebEnginePage::registerProtocolHandlerRequested,
+                      this,
+                      &WebEngineSignals::pageRegisterProtocolHandlerRequested);
     //ENSURE_QT_CONNECT(page,
-    //                  &QWebEnginePage::authenticationRequired,
+    //                  &QWebEnginePage::downloadRequested,
     //                  this,
-    //                  &WebEngineSignals::pageAuthenticationRequired);
-    //ENSURE_QT_CONNECT(page,
-    //                  &QWebEnginePage::proxyAuthenticationRequired,
-    //                  this,
-    //                  &WebEngineSignals::pageProxyAuthenticationRequired);
-    //ENSURE_QT_CONNECT(page,
-    //                  &QWebEnginePage::renderProcessTerminated,
-    //                  this,
-    //                  &WebEngineSignals::pageRenderProcessTerminated);
-//    ENSURE_QT_CONNECT(page, &QWebEnginePage::windowCloseRequested, this, &WebEngineSignals::pageWindowCloseRequested);
-//    //ENSURE_QT_CONNECT(page, &QWebEnginePage::profileChanged, this, &WebEngineSignals::pageProfileChanged);
-//    //ENSURE_QT_CONNECT(page,
-//    //                  &QWebEnginePage::newWindowRequested,
-//    //                  this,
-//    //                  &WebEngineSignals::pageNewWindowRequested);
-//    ENSURE_QT_CONNECT(page,
-//                      &QWebEnginePage::registerProtocolHandlerRequested,
-//                      this,
-//                      &WebEngineSignals::pageRegisterProtocolHandlerRequested);
-//    //ENSURE_QT_CONNECT(page,
-//    //                  &QWebEnginePage::downloadRequested,
-//    //                  this,
-//    //                  &WebEngineSignals::pageDownloadRequested);
+    //                  &WebEngineSignals::pageDownloadRequested);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     ENSURE_QT_CONNECT(page,
                       &QWebEnginePage::notificationShown,

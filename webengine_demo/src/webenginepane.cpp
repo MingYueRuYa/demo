@@ -2,6 +2,7 @@
 
 #include "connectguard.h"
 #include "webbridge.h"
+#include "webenginepanesignalhandler.h"
 #include "webenginesignals.h"
 
 #include <QAction>
@@ -23,6 +24,7 @@
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
 #include <QWebEngineView>
+#include <QtGlobal>
 
 namespace {
 
@@ -84,24 +86,12 @@ WebEnginePane::WebEnginePane(WebBridge *bridge, QWidget *parent)
     ensureBridge();
     setupChannel();
     resetLoadState();
-    m_signalHub = new WebEngineSignals(this);
+    m_signalHub = new WebEnginePaneSignalHandler(this);
     m_signalHub->bind(m_view);
 
-    ENSURE_QT_CONNECT(m_view, &QWebEngineView::urlChanged, this, &WebEnginePane::urlChanged);
-    ENSURE_QT_CONNECT(m_view, &QWebEngineView::loadFinished, this, &WebEnginePane::loadFinished);
     ENSURE_QT_CONNECT(m_bridge, &WebBridge::messageFromJs, this, &WebEnginePane::messageFromJs);
     ENSURE_QT_CONNECT(m_view, &QWidget::customContextMenuRequested, this, &WebEnginePane::showCustomContextMenu);
-    ENSURE_QT_CONNECT(m_view, &QWebEngineView::loadStarted, this, &WebEnginePane::handleLoadStarted);
     ENSURE_QT_CONNECT(m_bridge, &WebBridge::pageReady, this, &WebEnginePane::handlePageReady);
-    ENSURE_QT_CONNECT(m_view,
-                      &QWebEngineView::loadFinished,
-                      this,
-                      [this](bool ok) {
-                          m_lastLoadSucceeded = ok;
-                          if (m_lastLoadSucceeded && m_jsReady) {
-                              flushPendingMessages();
-                          }
-                      });
 }
 
 WebEnginePane::~WebEnginePane() = default;

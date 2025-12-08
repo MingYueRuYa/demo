@@ -24,6 +24,9 @@
     <ClCompile Include="src\configmanager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\webenginepanesignalhandler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="src\webenginesignals.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -54,6 +57,9 @@
       <Filter>头文件</Filter>
     </QtMoc>
     <ClInclude Include="src\configmanager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\webenginepanesignalhandler.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <QtMoc Include="src\webenginesignals.h">

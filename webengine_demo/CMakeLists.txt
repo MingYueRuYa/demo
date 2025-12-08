@@ -21,6 +21,8 @@ qt_add_executable(WebEngineDemo
     src/configmanager.h
     src/webenginesignals.cpp
     src/webenginesignals.h
+    src/webenginepanesignalhandler.cpp
+    src/webenginepanesignalhandler.h
     src/messageconsole.cpp
     src/messageconsole.h
     src/webenginepane.cpp

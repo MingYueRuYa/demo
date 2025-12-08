@@ -12,10 +12,12 @@ class QPoint;
 
 class WebBridge;
 class WebEngineSignals;
+class WebEnginePaneSignalHandler;
 
 class WebEnginePane final : public QWidget
 {
     Q_OBJECT
+    friend class WebEnginePaneSignalHandler;
 
 public:
     explicit WebEnginePane(WebBridge *bridge = nullptr, QWidget *parent = nullptr);
@@ -45,15 +47,16 @@ private slots:
     void showCustomContextMenu(const QPoint &pos);
     void handleLoadStarted();
     void handlePageReady();
+    void resetLoadState();
 
 private:
     void configureProfile();
     void configureView();
     void setupChannel();
     void ensureBridge();
-    void resetLoadState();
     void flushPendingMessages();
 
+private:
     QWebEngineView *m_view {nullptr};
     QWebEngineProfile *m_profile {nullptr};
     QWebChannel *m_channel {nullptr};

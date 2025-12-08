@@ -17,6 +17,8 @@
 //#include <QWebEngineLoadingInfo>
 //#include <QWebEngineSelectClientCertificateRequest>
 
+#include <QWebEngineClientCertificateSelection>
+
 class QAuthenticator;
 class QPoint;
 class QWebEngineDownloadRequest;
@@ -52,22 +54,22 @@ signals:
     //void viewLoadingChanged(const QWebEngineLoadingInfo &info);
     void viewSelectionChanged();
     void viewRenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus status, int exitCode);
-    void viewZoomFactorChanged(qreal factor);
+    //void viewZoomFactorChanged(qreal factor);
     void viewFindTextFinished(const QWebEngineFindTextResult &result);
 
     void pageLinkHovered(const QString &url);
-    void pageFullScreenRequested(const QWebEngineFullScreenRequest &request);
+    void pageFullScreenRequested(QWebEngineFullScreenRequest request);
     void pageFeaturePermissionRequested(const QUrl &url, QWebEnginePage::Feature feature);
     void pageFeaturePermissionRequestCanceled(const QUrl &url, QWebEnginePage::Feature feature);
-    void pageQuotaRequested(const QWebEngineQuotaRequest &request);
-    void pageCertificateError(const QWebEngineCertificateError &error);
-    //void pageSelectClientCertificate(QWebEngineSelectClientCertificateRequest &request);
-    void pageAuthenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator, const QString &proxyHost);
+    void pageQuotaRequested(QWebEngineQuotaRequest request);
+    void pageCertificateError(const QWebEngineCertificateError &certificateError);
+    void pageSelectClientCertificate(QWebEngineClientCertificateSelection request);
+    void pageAuthenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator);
     void pageProxyAuthenticationRequired(const QUrl &requestUrl, QAuthenticator *authenticator, const QString &proxyHost);
     void pageRenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus status, int exitCode);
     void pageWindowCloseRequested();
-    void pageProfileChanged(QWebEngineProfile *profile);
-    void pageNewWindowRequested(const QWebEngineNewWindowRequest &request);
+    //void pageProfileChanged(QWebEngineProfile *profile);
+    //void pageNewWindowRequested(const QWebEngineNewWindowRequest &request);
     void pageRegisterProtocolHandlerRequested(const QWebEngineRegisterProtocolHandlerRequest &request);
     void pageDownloadRequested(QWebEngineDownloadRequest *download);
     void pageNotificationShown(QWebEngineNotification *notification);

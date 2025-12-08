@@ -89,6 +89,7 @@
     <ClCompile Include="src\configmanager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\messageconsole.cpp" />
+    <ClCompile Include="src\webenginepanesignalhandler.cpp" />
     <ClCompile Include="src\webenginesignals.cpp" />
     <ClCompile Include="src\webenginepane.cpp" />
     <ClCompile Include="src\webbridge.cpp" />
@@ -99,6 +100,7 @@
     <QtMoc Include="src\webenginepane.h" />
     <QtMoc Include="src\webbridge.h" />
     <ClInclude Include="src\configmanager.h" />
+    <ClInclude Include="src\webenginepanesignalhandler.h" />
     <QtMoc Include="src\webenginesignals.h" />
   </ItemGroup>
   <ItemGroup>
