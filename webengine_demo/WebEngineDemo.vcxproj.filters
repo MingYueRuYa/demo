@@ -36,10 +36,10 @@
     <ClCompile Include="src\messageconsole.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\webenginepane.cpp">
+    <ClCompile Include="src\webbridge.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\webbridge.cpp">
+    <ClCompile Include="src\webenginepane.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

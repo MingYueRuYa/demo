@@ -27,6 +27,7 @@ private slots:
     void applyOpacity(int sliderValue);
     void handleTransparencyToggle(bool enabled);
     void applyCustomUserAgent();
+    void applyRedirectTarget();
 
 private:
     void buildUi();
@@ -39,6 +40,7 @@ private:
     MessageConsole *m_console {nullptr};
     QLineEdit *m_addressBar {nullptr};
     QLineEdit *m_userAgentInput {nullptr};
+    QLineEdit *m_redirectInput {nullptr};
     QSlider *m_opacitySlider {nullptr};
     QAction *m_transparentAction {nullptr};
 };

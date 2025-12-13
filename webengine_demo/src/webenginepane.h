@@ -2,7 +2,9 @@
 
 #include <QString>
 #include <QStringList>
+#include <QUrl>
 #include <QWidget>
+#include <QWebEnginePage>
 
 class QUrl;
 class QWebChannel;
@@ -13,6 +15,25 @@ class QPoint;
 class WebBridge;
 class WebEngineSignals;
 class WebEnginePaneSignalHandler;
+class QWebEnginePage;
+
+//namespace {
+
+class InterceptingPage final : public QWebEnginePage
+{
+    Q_OBJECT
+
+public:
+    explicit InterceptingPage(QWebEngineProfile* profile, QObject* parent = nullptr);
+    void setRedirectTarget(const QUrl& target);
+
+protected:
+    virtual bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame);
+
+private:
+    QUrl m_redirectTarget{ QUrl(QStringLiteral("https://baidu.com")) };
+};
+//}
 
 class WebEnginePane final : public QWidget
 {
@@ -31,6 +52,8 @@ public:
     WebEngineSignals *signalHub() const;
     bool setCookieForCurrentPage(const QString& cookieLine);
     void dumpDocumentCookies();
+    void setRedirectTarget(const QUrl &url);
+    QUrl redirectTarget() const;
 
 public slots:
     void load(const QUrl &url);
@@ -66,5 +89,6 @@ private:
     bool m_jsReady {false};
     QStringList m_pendingPayloads;
     WebEngineSignals *m_signalHub {nullptr};
+    QUrl m_redirectTarget = QStringLiteral("https://baidu.com");
 };
 

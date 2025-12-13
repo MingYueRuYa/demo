@@ -91,7 +91,12 @@
     <ClCompile Include="src\messageconsole.cpp" />
     <ClCompile Include="src\webenginepanesignalhandler.cpp" />
     <ClCompile Include="src\webenginesignals.cpp" />
-    <ClCompile Include="src\webenginepane.cpp" />
+    <ClCompile Include="src\webenginepane.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="src\webbridge.cpp" />
   </ItemGroup>
   <ItemGroup>

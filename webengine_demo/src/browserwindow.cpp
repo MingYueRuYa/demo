@@ -112,6 +112,17 @@ void BrowserWindow::buildToolbar()
         toolbar->addWidget(m_userAgentInput);
     }
 
+    if (m_engine) {
+        toolbar->addSeparator();
+        m_redirectInput = new QLineEdit(this);
+        m_redirectInput->setPlaceholderText(tr("知乎重定向目标（默认 https://baidu.com）"));
+        m_redirectInput->setClearButtonEnabled(true);
+        m_redirectInput->setText(m_engine->redirectTarget().toString());
+        ENSURE_QT_CONNECT(m_redirectInput, &QLineEdit::returnPressed, this, &BrowserWindow::applyRedirectTarget);
+        ENSURE_QT_CONNECT(m_redirectInput, &QLineEdit::editingFinished, this, &BrowserWindow::applyRedirectTarget);
+        toolbar->addWidget(m_redirectInput);
+    }
+
     toolbar->addSeparator();
     auto *clearAction = toolbar->addAction(tr("清空缓存"));
     ENSURE_QT_CONNECT(clearAction, &QAction::triggered, this, &BrowserWindow::clearProfileData);
@@ -220,6 +231,39 @@ void BrowserWindow::applyCustomUserAgent()
     } else {
         updateStatus(tr("已应用自定义 UA"));
     }
+}
+
+void BrowserWindow::applyRedirectTarget()
+{
+    if (!m_engine) {
+        return;
+    }
+
+    const QString input = m_redirectInput ? m_redirectInput->text().trimmed() : QString();
+    if (input.isEmpty()) {
+        const QUrl defaultUrl(QStringLiteral("https://baidu.com"));
+        m_engine->setRedirectTarget(defaultUrl);
+        if (m_redirectInput) {
+            m_redirectInput->setText(defaultUrl.toString());
+        }
+        updateStatus(tr("已恢复默认知乎重定向目标"));
+        return;
+    }
+
+    const QUrl target = QUrl::fromUserInput(input);
+    if (!target.isValid() || target.scheme().isEmpty()) {
+        updateStatus(tr("无效的重定向目标：%1").arg(input), 8000);
+        if (m_redirectInput) {
+            m_redirectInput->setText(m_engine->redirectTarget().toString());
+        }
+        return;
+    }
+
+    m_engine->setRedirectTarget(target);
+    if (m_redirectInput) {
+        m_redirectInput->setText(target.toString());
+    }
+    updateStatus(tr("已设置知乎重定向目标：%1").arg(target.toString()));
 }
 
 void BrowserWindow::updateStatus(const QString &text, int timeoutMs)

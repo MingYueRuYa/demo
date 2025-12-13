@@ -20,17 +20,15 @@
 #include <QWebChannel>
 #include <QWebEngineContextMenuData>
 #include <QWebEngineCookieStore>
-#include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
 #include <QWebEngineView>
 #include <QtGlobal>
 
-namespace {
+//namespace {
 
 constexpr auto kZhihuHost = "www.zhihu.com";
 constexpr auto kZhihuHostNoWWW = "zhihu.com";
-const QUrl kRedirectTarget(QStringLiteral("https://baidu.com"));
 
 bool shouldRedirectZhihu(const QUrl &url)
 {
@@ -45,29 +43,30 @@ bool shouldRedirectZhihu(const QUrl &url)
     return false;
 }
 
-class InterceptingPage final : public QWebEnginePage
+InterceptingPage::InterceptingPage(QWebEngineProfile* profile, QObject* parent)
+	: QWebEnginePage(profile, parent)
 {
-public:
-    explicit InterceptingPage(QWebEngineProfile *profile, QObject *parent = nullptr)
-        : QWebEnginePage(profile, parent)
-    {
-    }
+}
 
-protected:
-    bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame) override
-    {
-        if (isMainFrame && shouldRedirectZhihu(url)) {
-            const QUrl target(kRedirectTarget);
-            QTimer::singleShot(0, this, [this, target]() {
-                this->load(target);
-            });
-            return false;
-        }
-        return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
-    }
-};
+void InterceptingPage::setRedirectTarget(const QUrl &target)
+{
+	m_redirectTarget = target;
+}
 
-} // namespace
+bool InterceptingPage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame)
+{
+	if (isMainFrame && shouldRedirectZhihu(url) && m_redirectTarget.isValid()) {
+		const QUrl target(m_redirectTarget);
+		QTimer::singleShot(0, this, [this, target]() {
+			this->load(target);
+		});
+		return false;
+	}
+	return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
+}
+
+
+//} // namespace
 
 WebEnginePane::WebEnginePane(WebBridge *bridge, QWidget *parent)
     : QWidget(parent)
@@ -240,6 +239,23 @@ void WebEnginePane::broadcastToPage(const QString &payload)
     m_pendingPayloads.append(trimmed);
 }
 
+void WebEnginePane::setRedirectTarget(const QUrl &url)
+{
+    if (!url.isValid() || url.scheme().isEmpty()) {
+        return;
+    }
+
+    m_redirectTarget = url;
+    if (auto *page = qobject_cast<InterceptingPage *>(m_view ? m_view->page() : nullptr)) {
+        page->setRedirectTarget(m_redirectTarget);
+    }
+}
+
+QUrl WebEnginePane::redirectTarget() const
+{
+    return m_redirectTarget;
+}
+
 void WebEnginePane::configureProfile()
 {
     m_profile = new QWebEngineProfile("DemoProfile", this);
@@ -262,6 +278,7 @@ void WebEnginePane::configureView()
         return;
     }
     auto *page = new InterceptingPage(m_profile, m_view);
+    page->setRedirectTarget(m_redirectTarget);
     m_view->setPage(page);
     auto *settings = page->settings();
     settings->setAttribute(QWebEngineSettings::JavascriptEnabled, true);
